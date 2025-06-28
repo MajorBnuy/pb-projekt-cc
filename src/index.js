@@ -3,6 +3,7 @@ import chalk from "chalk"
 import projects from "./projects.js"
 
 
+mainLoop()
 //----------------------------------- MENU 
 function showMenu() {
   console.log(`
@@ -12,39 +13,42 @@ function showMenu() {
 ║ [1] Projekt anzeigen               ║
 ║ [2] Projekt hinzufügen             ║
 ║ [3] Projekt ändern | Löschen       ║
-║ [4] Beenden                        ║
+║ [4] Pomodoro Timer                 ║
+║ [5] Beenden                        ║
 ╚════════════════════════════════════╝
 `);
    const choiseMenu = rls.question("Wähle eine Option > ")
    return choiseMenu
 }
 //----------------------------------- LOOP
-let running = true;
+function mainLoop() {
+  const userChoice = showMenu();
 
-while (running) {
-   const userChoice = showMenu();
-
-   switch (userChoice) {
-      case "1":
-         showProjects();
-         break;
-      case "2":
-         addProject()
-         break;
-      case "3":
-        console.clear();
-         manageProject()
-         break;
-      case "4":
-        console.clear();
-         console.log("\nTschüss!");
-         running = false;
-         break;
-      default:
-      console.log("\nBitte nur [1], [2] oder [3] eingeben!");
-      console.log("Versuch's nochmal. Du schaffst das! (ง •̀_•́)ง\n");
-   }
+  switch (userChoice) {
+    case "1":
+      showProjects();
+      break;
+    case "2":
+      addProject();
+      break;
+    case "3":
+      console.clear();
+      manageProject();
+      break;
+    case "4":
+      console.clear();
+      setTimer(mainLoop);
+      return;
+    case "5":
+      console.clear();
+      console.log("\nTschüss!");
+      return;
+    default:
+      console.log("\nBitte nur eine der oben genannten Zahlen eingeben!");
+  }
+  mainLoop();
 }
+
 //----------------------------------- SHOW PROJECTS
 function showProjects() {
   console.clear();
@@ -124,6 +128,7 @@ const choice = rls.question("Wähle eine Option > ");
         changeStatus();
         break;
       case "3":
+        console.clear();
         deleteProject()
         break;
       case "4":
@@ -265,8 +270,9 @@ function deleteProject() {
     return console.log("=> Zurück zum Menü");
   }
   if (isNaN(index) || index < 0 || index >= projects.length) {
-    console.log("Ungültige Nummer. Bitte gib eine Zahl aus der Liste ein. (｡•́︿•̀｡)");
-    return;
+    console.clear();
+    console.log("Ungültige Eingabe" + chalk.red(` ${indexInput}`) + ". Bitte gib eine Zahl aus der Liste ein");
+    return deleteProject();
   }
 
   const confirm = rls.question(chalk.red(`\nBist du sicher, dass du "${projects[index].name}" löschen möchtest? (j/n) > `));
@@ -280,4 +286,25 @@ function deleteProject() {
     console.log("Abgebrochen. Projekt wurde nicht gelöscht.");
   }
 }
-//-----------------------------------
+//----------------------------------- TIMER
+
+function setTimer(callback) {
+  let minutes = 0.1;
+  let seconds = minutes * 60;
+  
+  console.log("Starte den Timer...");
+  const timer = setInterval(() => {
+    const min = String(Math.floor(seconds / 60)).padStart(2, "0");
+    const sec = String(Math.floor(seconds % 60)).padStart(2, "0");
+    
+    process.stdout.write(`\r⏳ ${min}:${sec}`);
+
+    seconds--;
+
+    if (seconds < 0) {
+      clearInterval(timer);
+      console.log("\nZeit ist um! Mach eine Pause!");
+      if (callback) callback(); 
+    }
+  }, 1000);
+};
