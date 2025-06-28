@@ -1,7 +1,24 @@
 import rls from "readline-sync"
+import chalk from "chalk"
 import projects from "./projects.js"
 
-//-----------------------------------
+
+//----------------------------------- MENU 
+function showMenu() {
+  console.log(`
+╔════════════════════════════════════╗
+║           Projekt-Menü             ║
+╠════════════════════════════════════╣
+║ [1] Projekt anzeigen               ║
+║ [2] Projekt hinzufügen             ║
+║ [3] Projekt ändern | Löschen       ║
+║ [4] Beenden                        ║
+╚════════════════════════════════════╝
+`);
+   const choiseMenu = rls.question("Wähle eine Option > ")
+   return choiseMenu
+}
+//----------------------------------- LOOP
 let running = true;
 
 while (running) {
@@ -15,68 +32,89 @@ while (running) {
          addProject()
          break;
       case "3":
+        console.clear();
          manageProject()
          break;
       case "4":
-         console.log("Tschüss! 👋");
+        console.clear();
+         console.log("\nTschüss!");
          running = false;
          break;
       default:
-      console.log("\n⚠️ Bitte nur [1], [2] oder [3] eingeben!");
+      console.log("\nBitte nur [1], [2] oder [3] eingeben!");
       console.log("Versuch's nochmal. Du schaffst das! (ง •̀_•́)ง\n");
    }
 }
-//-----------------------------------
-function showMenu() {
-   console.log("\n~~~~~~~~~~~~~~~~~~");
-   console.log("[1] Projekt anzeigen");
-   console.log("[2] Projekt hinzufügen");
-   console.log("[3] Status Ändern | Löschen");
-   console.log("[4] Beenden");
-   console.log("~~~~~~~~~~~~~~~~~~\n");
-   const choiseMenu = rls.question("Wähle eine Option > ")
-   return choiseMenu
-}
-//-----------------------------------
+//----------------------------------- SHOW PROJECTS
 function showProjects() {
-   console.log("\nDeine Projekte:");
+  console.clear();
+   console.log(chalk.underline("\nDEINE PROJEKTE:\n"));
    if (projects.length === 0) {
       console.log("Noch keine Projekte.");
       return;
    }
+  projects.forEach((project, index) => {
+    let number = index + 1;
+    if (number < 10) {
+      number = `0${number}`;
+    }
+    number = `[${number}]`;
+    const name = project.name.padEnd(30, ' ');
 
-   projects.forEach((project, index) => {
-      console.log(`${index + 1}. ${project.name} [${project.status}] – ${project.tags}`);
-   });
+    let statusColored;
+      switch (project.status) {
+         case "Offen":
+            statusColored = chalk.red(project.status);
+            break;
+         case "In Arbeit":
+            statusColored = chalk.yellow(project.status);
+            break;
+         case "Beendet":
+            statusColored = chalk.green(project.status);
+            break;
+         default:
+            statusColored = project.status;
+      }
+    const status = `[${statusColored}]`;
+    console.log(`${number} ${name} || ${status}`);
+  });
 }
 
-//-----------------------------------
+//----------------------------------- ADD PROJECT
 function addProject() {
-  const name = rls.question("Name des neuen Projekts: ");
-  const status = "offen";
-  const tags = rls.question("Tags (kommagetrennt, optional): ");
-
+   console.log(chalk.underline("\nPROJEKT HINZUFÜGEN:\n"));
+  const name = rls.question("=> Name des neuen Projekts, oder 'x' für zurück > ");
+    if (name.toLowerCase() === "x") {
+    return console.clear();
+  }
+  const status = "Offen";
   const project = {
     name,
     status,
-    tags
   };
   projects.push(project);
-  console.log(`✅ Projekt "${name}" wurde hinzugefügt.`);
+  console.clear();
+  return console.log("Projekt" + chalk.red(` ${name} `)+ "wurde hinzugefügt.");
 }
-//-----------------------------------
+//----------------------------------- MANAGE PROJECT
 function manageProject() {
   let managing = true;
 
   while (managing) {
-    console.log("\n~~~~~~~~~~~~~~~~~~");
-    console.log("[1] Namen ändern");
-    console.log("[2] Status ändern");
-    console.log("[3] Projekt löschen");
-    console.log("[4] Zurück zum Hauptmenü");
-    console.log("~~~~~~~~~~~~~~~~~~\n");
+// console.clear();
+console.log(`
+╔════════════════════════════════════╗
+║       Projekt ändern / löschen     ║
+╠════════════════════════════════════╣
+║ [1] Namen ändern                   ║
+║ [2] Status ändern                  ║
+║ [3] Projekt löschen                ║
+║ [4] Zurück zum Hauptmenü           ║
+╚════════════════════════════════════╝
+`);
 
-    const choice = rls.question("Wähle eine Option > ");
+const choice = rls.question("Wähle eine Option > ");
+
 
     switch (choice) {
       case "1":
@@ -89,53 +127,88 @@ function manageProject() {
         deleteProject()
         break;
       case "4":
-        managing = false; // zurück zum Hauptmenü
+        console.clear();
+        managing = false; 
         break;
       default:
-        console.log("\n⚠️ Bitte nur [1] bis [4] eingeben!");
+        console.log("\nBitte nur [1] bis [4] eingeben!");
         console.log("Versuch's nochmal. Du schaffst das! (ง •̀_•́)ง\n");
     }
   }
 }
 
-//-----------------------------------
+//----------------------------------- CHANGE NAME
 function changeName() {
+  console.log(chalk.underline("\nPROJEKT-NAME ÄNDERN:\n"));
   console.log("Für welches Projekt möchtest du den Namen ändern?");
   
   projects.forEach((project, index) => {
-    console.log(`[${index + 1}] ${project.name} [${project.status}]`);
+    let number = index + 1;
+    if (number < 10) {
+      number = `0${number}`;
+    }
+    number = `[${number}]`;
+    const name = project.name.padEnd(30, ' ');
+    const status = `[${project.status}]`;
+    console.log(`${number} ${name} || ${status}`);
   });
-
+  console.log("- - - - - - -\nSchreibe x um zum Menü zurück zu kommen.");
+  
   const indexInput = rls.question("Gib die Nummer des Projekts ein > ");
   const index = parseInt(indexInput) - 1;
 
+  if (indexInput.toLowerCase() === "x") {
+    return console.log("=> Zurück zum Menü");
+  }
   if (isNaN(index) || index < 0 || index >= projects.length) {
-    console.log("❌ Ungültige Nummer. Bitte gib eine Zahl aus der Liste ein. (｡•́︿•̀｡)");
-    return;
+    console.clear();
+    console.log(chalk.red("Ungültige Nummer. Bitte gib eine Zahl aus der Liste ein."));
+    return changeName()
   }
   const project = projects[index];
-
-  console.log(`\nAktuelles Projekt: "${project.name}" [${project.status}]`);
-  console.log("Worauf soll der Name geändert werden?");
-
-  const statusName = rls.question("Gib den neuen Namen für den das Projekt ein > ");
+  console.log("\nAktuelles Projekt:" + chalk.red(` ${project.name} [${project.status}]`));
+  const statusName = rls.question("=> Gib den neuen Namen für das Projekt ein > ");
 
   project.name = statusName;
-  console.log(`✅ Status Name wurde erfolgreich auf "${statusName}" geändert! ヽ(•‿•)ノ`);
+  console.clear();
+  console.log("Projekt Name wurde erfolgreich auf" + chalk.red(` ${statusName} `) + "geändert!");
 }
-//-----------------------------------
+//----------------------------------- CHANGE STATUS
 function changeStatus() {
+  console.log(chalk.underline("\nPROJEKT-STATUS ÄNDERN:\n"));
   console.log("Für welches Projekt möchtest du den Status ändern?");
   
-  projects.forEach((project, index) => {
-    console.log(`[${index + 1}] ${project.name} [${project.status}]`);
+projects.forEach((project, index) => {
+    let number = index + 1;
+    if (number < 10) {
+      number = `0${number}`;
+    }
+    number = `[${number}]`;
+    const name = project.name.padEnd(30, ' ');
+
+    let statusColored;
+      switch (project.status) {
+         case "Offen":
+            statusColored = chalk.red(project.status);
+            break;
+         case "In Arbeit":
+            statusColored = chalk.yellow(project.status);
+            break;
+         case "Beendet":
+            statusColored = chalk.green(project.status);
+            break;
+         default:
+            statusColored = project.status;
+      }
+    const status = `[${statusColored}]`;
+    console.log(`${number} ${name} || ${status}`);
   });
 
   const indexInput = rls.question("Gib die Nummer des Projekts ein > ");
   const index = parseInt(indexInput) - 1;
 
   if (isNaN(index) || index < 0 || index >= projects.length) {
-    console.log("❌ Ungültige Nummer. Bitte gib eine Zahl aus der Liste ein. (｡•́︿•̀｡)");
+    console.log("Ungültige Nummer. Bitte gib eine Zahl aus der Liste ein. (｡•́︿•̀｡)");
     return;
   }
 
@@ -143,59 +216,68 @@ function changeStatus() {
 
   console.log(`\nAktuelles Projekt: "${project.name}" [${project.status}]`);
   console.log("Worauf soll der Status geändert werden?");
-  console.log("[1] Offen");
-  console.log("[2] In Arbeit");
-  console.log("[3] Pause");
-  console.log("[4] Beendet");
-  console.log("[5] Abgebrochen");
+  console.log("[1]" + chalk.red(" Offen"));
+  console.log("[2]"+ chalk.yellow(" In Arbeit"));
+  console.log("[3]"+ chalk.green(" Beendet"));
 
   const statusNumber = rls.question("Gib die Nummer für den neuen Status ein > ");
 
   const statusMap = {
     "1": "Offen",
     "2": "In Arbeit",
-    "3": "Pause",
-    "4": "Beendet",
-    "5": "Abgebrochen"
+    "3": "Beendet",
   };
 
   const newStatus = statusMap[statusNumber];
 
   if (!newStatus) {
-    console.log("⚠️ Ungültige Eingabe. Bitte gib eine Zahl von 1 bis 5 ein. (•ˋ _ ˊ•)");
+    console.log("Ungültige Eingabe. Bitte gib eine Zahl von 1 bis 5 ein. (•ˋ _ ˊ•)");
     return;
   }
 
   project.status = newStatus;
-  console.log(`✅ Status von "${project.name}" wurde erfolgreich auf "${newStatus}" geändert! ヽ(•‿•)ノ`);
+  console.clear();
+  console.log("Status von" + chalk.red(` ${project.name} `) + "wurde erfolgreich auf" + chalk.red(` ${newStatus} `) + "geändert!");
 }
 
-//-----------------------------------
+//----------------------------------- DELETE PROJECT
 function deleteProject() {
+  console.log(chalk.underline("\nPROJEKT LÖSCHEN:\n"));
   console.log("Welches Projekt möchtest du löschen?");
   
 
   projects.forEach((project, index) => {
-    console.log(`[${index + 1}] ${project.name} [${project.status}]`);
+    let number = index + 1;
+    if (number < 10) {
+      number = `0${number}`;
+    }
+    number = `[${number}]`;
+    const name = project.name.padEnd(30, ' ');
+    const status = `[${project.status}]`;
+    console.log(`${number} ${name} || ${status}`);
   });
-
+  console.log("- - - - - - -\nSchreibe x um zum Menü zurück zu kommen.");
   const indexInput = rls.question("Gib die Nummer des Projekts ein > ");
   const index = parseInt(indexInput) - 1;
 
+  if (indexInput.toLowerCase() === "x") {
+    console.clear();
+    return console.log("=> Zurück zum Menü");
+  }
   if (isNaN(index) || index < 0 || index >= projects.length) {
-    console.log("❌ Ungültige Nummer. Bitte gib eine Zahl aus der Liste ein. (｡•́︿•̀｡)");
+    console.log("Ungültige Nummer. Bitte gib eine Zahl aus der Liste ein. (｡•́︿•̀｡)");
     return;
   }
 
-  const confirm = rls.question(`Bist du sicher, dass du "${projects[index].name}" löschen möchtest? (j/n) > `);
+  const confirm = rls.question(chalk.red(`\nBist du sicher, dass du "${projects[index].name}" löschen möchtest? (j/n) > `));
 
   if (confirm.toLowerCase() === "j") {
     const removed = projects.splice(index, 1);
-    console.log(`🗑️ Projekt "${removed[0].name}" wurde gelöscht. ✨`);
+    console.clear();
+    console.log("Projekt" + chalk.red(` ${removed[0].name} `)+ "wurde gelöscht.");
   } else {
-    console.log("Abgebrochen. Projekt wurde nicht gelöscht. (⌒_⌒;)");
+    console.clear();
+    console.log("Abgebrochen. Projekt wurde nicht gelöscht.");
   }
 }
-
-
 //-----------------------------------
