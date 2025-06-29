@@ -44,6 +44,7 @@ function mainLoop() {
       console.log("\nTschüss!");
       return;
     default:
+      console.clear();
       console.log("\nBitte nur eine der oben genannten Zahlen eingeben!");
   }
   mainLoop();
@@ -63,7 +64,7 @@ function showProjects() {
       number = `0${number}`;
     }
     number = `[${number}]`;
-    const name = project.name.padEnd(30, ' ');
+    const name = project.name.padEnd(30, '.');
 
     let statusColored;
       switch (project.status) {
@@ -153,7 +154,7 @@ function changeName() {
       number = `0${number}`;
     }
     number = `[${number}]`;
-    const name = project.name.padEnd(30, ' ');
+    const name = project.name.padEnd(30, '.');
     const status = `[${project.status}]`;
     console.log(`${number} ${name} || ${status}`);
   });
@@ -189,7 +190,7 @@ projects.forEach((project, index) => {
       number = `0${number}`;
     }
     number = `[${number}]`;
-    const name = project.name.padEnd(30, ' ');
+    const name = project.name.padEnd(30, '.');
 
     let statusColored;
       switch (project.status) {
@@ -250,17 +251,17 @@ function deleteProject() {
   console.log(chalk.underline("\nPROJEKT LÖSCHEN:\n"));
   console.log("Welches Projekt möchtest du löschen?");
   
-
   projects.forEach((project, index) => {
     let number = index + 1;
     if (number < 10) {
       number = `0${number}`;
     }
     number = `[${number}]`;
-    const name = project.name.padEnd(30, ' ');
+    const name = project.name.padEnd(30, '.');
     const status = `[${project.status}]`;
     console.log(`${number} ${name} || ${status}`);
   });
+
   console.log("- - - - - - -\nSchreibe x um zum Menü zurück zu kommen.");
   const indexInput = rls.question("Gib die Nummer des Projekts ein > ");
   const index = parseInt(indexInput) - 1;
@@ -289,7 +290,12 @@ function deleteProject() {
 //----------------------------------- TIMER
 
 function setTimer(callback) {
-  let minutes = 0.1;
+  const timeInput = rls.question("Wie viele Minuten soll der Timer laufen? > ");
+  const minutes = parseFloat(timeInput);
+  if (isNaN(minutes) || minutes <= 0) {
+    console.log("Ungültige Eingabe. Bitte eine Zahl größer als 0 eingeben.");
+    return;
+  }
   let seconds = minutes * 60;
   
   console.log("Starte den Timer...");

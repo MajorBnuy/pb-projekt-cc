@@ -1,7 +1,7 @@
 # Productivity - PB - Project cc. 
 
 -- CRUD Datenbank für Projektsammlung --
- + Pomodoro Timer
+ + (Pomodoro) Timer
 
 ## Ideensammlung: 
 
@@ -10,7 +10,7 @@
   - Neue Projekte anlegen ✓
   - Status: Idee, in Arbeit, Erledigt ✓
 
-- Fokus-Timer (Pomodoro)
+- Fokus-Timer (Pomodoro) 
   - Einen Timer starten (zb. 25 Minuten) für fokusiertes arbeiten
   - Timer mit Countdown (?) 
   - Pausenzeiten vewalten (5 Minuten)
@@ -33,14 +33,16 @@
       - Name ändern ✓
       - Status Ändern ✓
       - (Kategorie ändern)
-      - Status in %
     - Löschen
       - Name des zu löschenden Projekts ✓
         - wirklich löschen? y/N ✓
   - Promodoro
-    - Erstellen
+    - Erstellen ✓
       - Wie viele Runden
         - Pause dazwischen 5 / 10
 
 ## Design
-- Bessere Übersicht durch Farben und Design
+- Bessere Übersicht durch Farben und Design ✓
+
+## Comming Soon
+- Verbindung mit Timer und Project
