@@ -11,20 +11,17 @@
   - Status: Idee, in Arbeit, Erledigt ✓
 
 - Fokus-Timer (Pomodoro) 
-  - Einen Timer starten (zb. 25 Minuten) für fokusiertes arbeiten
-  - Timer mit Countdown (?) 
+  - Einen Timer starten (zb. 25 Minuten) für fokusiertes arbeiten ✓
+  - Timer mit Countdown (?) ✓
   - Pausenzeiten vewalten (5 Minuten)
 
-- Extras
-  - Wie viele Promodos wurden für ein Projekt genutzt
-  - Fortschritt des Projektes %
-  - zufällige Ideen anzeigen
+
 
 
 ## Aufbau:
 
 - Interface: 
-  - Übersicht Projekte
+  - Übersicht Projekte ✓
     - Erstellen ✓
       - Name ✓
       - Status ✓ 
@@ -44,5 +41,9 @@
 ## Design
 - Bessere Übersicht durch Farben und Design ✓
 
+
 ## Comming Soon
 - Verbindung mit Timer und Project
+- Prozentanzahl der fertigstellung -> Balken? 
+- Wie viele Promodos wurden für ein Projekt genutzt
+- zufällige Ideen anzeigen
