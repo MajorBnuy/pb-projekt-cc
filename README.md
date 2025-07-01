@@ -1,4 +1,4 @@
-# Projekt-Manager CLI Tool
+# Projekt-Manager Tool
 
 Ein einfaches Kommandozeilen-Tool zur Verwaltung von Projekten mit integriertem Pomodoro-Timer. Ideal, um den Überblick über laufende Aufgaben zu behalten und fokussiert zu arbeiten.
 
