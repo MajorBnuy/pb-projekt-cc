@@ -1,49 +1,27 @@
-# Productivity - PB - Project cc. 
+# Projekt-Manager CLI Tool
 
--- CRUD Datenbank für Projektsammlung --
- + (Pomodoro) Timer
+Ein einfaches Kommandozeilen-Tool zur Verwaltung von Projekten mit integriertem Pomodoro-Timer. Ideal, um den Überblick über laufende Aufgaben zu behalten und fokussiert zu arbeiten.
 
-## Ideensammlung: 
+---
 
-- Ideen/ Projektverwaltung
-  - Suchen nach Name, Kategorie oder Tags ✓
-  - Neue Projekte anlegen ✓
-  - Status: Idee, in Arbeit, Erledigt ✓
+## Funktionen
 
-- Fokus-Timer (Pomodoro) 
-  - Einen Timer starten (zb. 25 Minuten) für fokusiertes arbeiten ✓
-  - Timer mit Countdown (?) ✓
-  - Pausenzeiten vewalten (5 Minuten)
+- Projekte anzeigen
+- Neues Projekt hinzufügen
+- Projektnamen oder -status ändern
+- Projekte löschen
+- Pomodoro-Timer starten
+- Benutzerfreundliche CLI mit farblicher Darstellung (chalk)
 
+---
 
+## Abhängigkeiten
 
+readline-sync: Für Benutzereingaben im Terminal
+chalk: Für farbige Ausgaben in der Konsole
 
-## Aufbau:
+Installation bei Bedarf:
 
-- Interface: 
-  - Übersicht Projekte ✓
-    - Erstellen ✓
-      - Name ✓
-      - Status ✓ 
-      - (Kategorie)
-    - Bearbeiten
-      - Name ändern ✓
-      - Status Ändern ✓
-      - (Kategorie ändern)
-    - Löschen
-      - Name des zu löschenden Projekts ✓
-        - wirklich löschen? y/N ✓
-  - Promodoro
-    - Erstellen ✓
-      - Wie viele Runden
-        - Pause dazwischen 5 / 10
-
-## Design
-- Bessere Übersicht durch Farben und Design ✓
+```npm install readline-sync chalk```
 
 
-## Comming Soon
-- Verbindung mit Timer und Project
-- Prozentanzahl der fertigstellung -> Balken? 
-- Wie viele Promodos wurden für ein Projekt genutzt
-- zufällige Ideen anzeigen
